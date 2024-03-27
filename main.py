@@ -287,11 +287,9 @@ def main():
 
             if screen.get_width()/2+20 > barrier.rect.x > screen.get_width()/2-20:
                 barrier.originate()
-                points1 -= 2
 
             if screen.get_width()/2+20 > barrier2.rect.x > screen.get_width()/2-20:
                 barrier2.originate()
-                points2 -= 2
 
             try:
                 del collisions[-3]

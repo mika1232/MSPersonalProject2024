@@ -30,12 +30,12 @@ class Barrier2(Barrier):
         self.rect = self.image.get_rect()
         self.rect.center = pygame.display.get_surface().get_rect().center
         self.rect.x += 100
-        self.speed = 7
+        self.speed = 20
         self.origin = [self.rect.x, self.rect.y]
         self.target = 0
 
     def reach(self, y):
-        self.target = self.rect.y - y
+        self.target = (self.rect.y-50) - y
         if abs(self.target) > 100:
             self.speed = 10
         if abs(self.target) > 200:

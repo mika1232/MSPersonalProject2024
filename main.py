@@ -9,12 +9,13 @@ from barrier import Barrier, Barrier2
 from border import Border, Top_Border
 from points import Point_Display
 from menu.text import Menu_Text
+from bg import Bg
 
 pygame.init()
 
 # Константы
-WIDTH = 700
-HEIGHT = 600
+WIDTH = 640
+HEIGHT = 480
 FPS = 60
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands()
@@ -87,7 +88,7 @@ def get_hand_data():
             for landmark in hand_landmarks.landmark:
                 h, w, _ = frame.shape
                 hs, hw = h, w
-                if index in [0, 1]:
+                if index in [6, 7]:
                     cx, cy = int(landmark.x * w), int(landmark.y * h)
                     hands_dict[f'{hand_index}'].append([cx, cy])
                 index += 1
@@ -98,12 +99,14 @@ def get_hand_data():
 
 def main():
     # Спрайты
+
     ball = Ball()
     barrier = Barrier()
     barrier2 = Barrier2()
     ai_ball = AI_ball(ball)
     border = Border()
     menu_text = Menu_Text()
+    bg = Bg()
     top_border = Top_Border()
     point_display = Point_Display('0', '0')
 
@@ -123,7 +126,9 @@ def main():
         barrier2.update(WIDTH - 60, 300 - 150)
     updating_all = True
     while running:
-        clock.tick(FPS)
+        ret, frame = cap.read()
+        frame = cv2.flip(frame, 1)
+        cv2.imwrite("cur_image.png", frame)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -132,6 +137,7 @@ def main():
 
         screen.fill((255, 255, 255))
         if not menu:
+            bg.draw(screen)
             barrier.draw(screen)
             barrier2.draw(screen)
             border.draw(screen)

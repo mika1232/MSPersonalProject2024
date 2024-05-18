@@ -16,8 +16,7 @@ class Barrier(pygame.sprite.Sprite):
 
     def update(self, x, y):
         if self.permit:
-            self.rect.x = x
-            self.rect.y = y
+            self.rect.midtop = [x, y]
 
     def originate(self):
         self.rect.x = self.origin[0]

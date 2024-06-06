@@ -1,3 +1,5 @@
+import time
+
 import cv2
 import pygame
 import sys
@@ -10,6 +12,7 @@ from border import Border, Top_Border
 from points import Point_Display
 from menu.text import Menu_Text
 from bg import Bg
+from result import Result
 
 pygame.init()
 
@@ -19,6 +22,8 @@ HEIGHT = 480
 FPS = 60
 
 scoring = [10, 15, 30, 45]
+
+drawing = True
 
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands()
@@ -101,6 +106,7 @@ def get_hand_data():
     return [hands_dict, [hs, ws]]
 
 def main():
+    global drawing
     # Спрайты
 
     ball = Ball()
@@ -109,9 +115,11 @@ def main():
     ai_ball = AI_ball(ball)
     border = Border()
     menu_text = Menu_Text()
+    result_display = Result()
     bg = Bg()
     top_border = Top_Border()
-    point_display = Point_Display('0', '0')
+    if drawing:
+        point_display = Point_Display('0', '0')
 
     collisions = []
     collisions2 = []
@@ -125,13 +133,27 @@ def main():
     menu = True
     ai_enabled = True
     ai_calculate = False
-    if ai_enabled:
+    if ai_enabled and drawing:
         barrier2.update(WIDTH - 60, 300 - 150)
     updating_all = True
     while running:
         ret, frame = cap.read()
         frame = cv2.flip(frame, 1)
         cv2.imwrite("cur_image.png", frame)
+
+        if 5 == 5:
+            result_display.draw(screen, 1)
+            drawing = False
+
+        if points1 >= 5:
+            result_display.draw(screen, 1)
+
+        if points2 == 5:
+            result_display.draw(screen, 2)
+            drawing = False
+
+        if points2 >= 5:
+            result_display.draw(screen, 2)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -140,16 +162,17 @@ def main():
 
         screen.fill((255, 255, 255))
         if not menu:
-            bg.draw(screen)
-            barrier.draw(screen)
-            barrier2.draw(screen)
-            border.draw(screen)
-            top_border.draw(screen)
-            point_display.draw(screen, points1, points2)
-            ball.draw(screen)
+            if drawing:
+                bg.draw(screen)
+                barrier.draw(screen)
+                barrier2.draw(screen)
+                border.draw(screen)
+                top_border.draw(screen)
+                point_display.draw(screen, points1, points2)
+                ball.draw(screen)
             # ai_ball.draw(screen)
 
-            if not barrier1_hidden or not barrier2_hidden:
+            if not barrier1_hidden or not barrier2_hidden and drawing:
                 ball.update()
                 if ai_enabled and not ai_calculate:
                     ai_ball.reset(ball)
@@ -167,25 +190,20 @@ def main():
                 dictionary_counter += 1
 
             try:
-                if not barrier1_hidden:
+                if not barrier1_hidden and drawing:
                     barrier.update(dictionary['0'][1][0]*(WIDTH/640), dictionary['0'][1][1]*(HEIGHT/440)-50)
 
             except IndexError:
                 pass
             try:
-                if not barrier2_hidden and not ai_enabled:
+                if not barrier2_hidden and not ai_enabled and drawing:
                     barrier2.update(dictionary['1'][1][0]*(700/640), dictionary['1'][1][1]*(600/440)-50)
-                elif ai_enabled and barrier2.target != 0:
+                elif ai_enabled and barrier2.target != 0 and drawing:
                     barrier2.move()
             except IndexError:
                 pass
 
-            if points1 == 10:
-                print("PLAYER 1 WON")
-                quit()
-            if points2 == 10:
-                print("PLAYER 2 WON")
-                quit()
+
 
             # Ball movement
 
@@ -216,8 +234,6 @@ def main():
 
             if not ai_calculate and ai_enabled:
                 ai_ball.reset(ball)
-            if ai_enabled:
-                ai_ball.draw(screen)
 
             if ai_calculate and ai_enabled:
                 if ai_ball.rect.x >= WIDTH-70:

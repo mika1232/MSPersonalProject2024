@@ -37,22 +37,27 @@ class Barrier2(Barrier):
     def reach(self, y):
         self.target = (self.rect.y-50) - y
         if abs(self.target) > 100:
-            self.speed = 10
+            self.speed = 30
         if abs(self.target) > 200:
-            self.speed = 15
+            self.speed = 30
         if abs(self.target) > 300:
-            self.speed = 20
+            self.speed = 30
 
     def move(self):
         if self.target > 0:
-            self.rect.y -= self.speed
-            self.target -= self.speed
-            if self.target <= 0:
-                self.target = 0
+            if not self.rect.top < pygame.display.get_surface().get_rect().top:
+                self.rect.y -= self.speed
+                self.target -= self.speed
+                if self.target <= 0:
+                    self.target = 0
+            else:
+                pass
         if self.target < 0:
-            self.rect.y += self.speed
-            self.target += self.speed
-            if self.target >= 0:
-                self.target = 0
+            if not self.rect.bottom > pygame.display.get_surface().get_rect().bottom:
+                self.rect.y += self.speed
+                self.target += self.speed
+                if self.target >= 0:
+                    self.target = 0
+            else: pass
 
 

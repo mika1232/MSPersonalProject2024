@@ -34,6 +34,8 @@ class AI_ball(Ball):
     def __init__(self, ball):
         super().__init__()
         self.move1 = [ball.move[0]*2, ball.move[1]*2]
+        self.image = pygame.image.load("ball.png")
+        self.rect = self.image.get_rect()
         self.move2 = ball.move
         self.move = self.move2
         self.rect.center = ball.rect.center
@@ -41,6 +43,9 @@ class AI_ball(Ball):
     def reset(self, ball):
         self.rect.center = ball.rect.center
         self.move = ball.move
+
+    def draw(self, surface):
+        surface.blit(self.image, self.rect)
 
     def update(self):
         self.rect.x += self.move1[0]

@@ -17,6 +17,9 @@ pygame.init()
 WIDTH = 640
 HEIGHT = 480
 FPS = 60
+
+scoring = [10, 15, 30, 45]
+
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands()
 cap = cv2.VideoCapture(1)
@@ -213,6 +216,9 @@ def main():
 
             if not ai_calculate and ai_enabled:
                 ai_ball.reset(ball)
+            if ai_enabled:
+                ai_ball.draw(screen)
+
             if ai_calculate and ai_enabled:
                 if ai_ball.rect.x >= WIDTH-70:
                     barrier2.reach(ai_ball.rect.y-150)

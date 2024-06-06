@@ -12,7 +12,6 @@ from border import Border, Top_Border
 from points import Point_Display
 from menu.text import Menu_Text
 from bg import Bg
-from result import Result
 
 pygame.init()
 
@@ -115,7 +114,6 @@ def main():
     ai_ball = AI_ball(ball)
     border = Border()
     menu_text = Menu_Text()
-    result_display = Result()
     bg = Bg()
     top_border = Top_Border()
     if drawing:
@@ -141,19 +139,16 @@ def main():
         frame = cv2.flip(frame, 1)
         cv2.imwrite("cur_image.png", frame)
 
-        if 5 == 5:
-            result_display.draw(screen, 1)
+        if points1 == 5:
             drawing = False
-
-        if points1 >= 5:
-            result_display.draw(screen, 1)
+            bg.mode = 1
+            bg.won = 1
 
         if points2 == 5:
-            result_display.draw(screen, 2)
             drawing = False
+            bg.mode = 1
+            bg.won = 1
 
-        if points2 >= 5:
-            result_display.draw(screen, 2)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -162,14 +157,15 @@ def main():
 
         screen.fill((255, 255, 255))
         if not menu:
+            bg.draw(screen)
             if drawing:
-                bg.draw(screen)
                 barrier.draw(screen)
                 barrier2.draw(screen)
                 border.draw(screen)
                 top_border.draw(screen)
                 point_display.draw(screen, points1, points2)
                 ball.draw(screen)
+
             # ai_ball.draw(screen)
 
             if not barrier1_hidden or not barrier2_hidden and drawing:

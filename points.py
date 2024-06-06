@@ -27,6 +27,8 @@ class Point_Display(pygame.sprite.Sprite):
             surface.blit(self.image2, self.rect2)
             self.image = self.font.render(f"SCORE: {self.scoring_system[int(t1)]}", True, (0, 255, 0))
             self.image2 = self.font.render(f"SCORE: {self.scoring_system[int(t2)]}", True, (0, 0, 255))
+            self.rect = self.image.get_rect()
+            self.rect2 = self.image2.get_rect()
             surf = pygame.display.get_surface()
 
             self.rect.topleft = surf.get_rect().topleft

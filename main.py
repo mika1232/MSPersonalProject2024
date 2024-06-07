@@ -147,7 +147,7 @@ def main():
         if points2 == 5:
             drawing = False
             bg.mode = 1
-            bg.won = 1
+            bg.won = 2
 
 
         for event in pygame.event.get():
